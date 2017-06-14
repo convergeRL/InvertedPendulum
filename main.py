@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 
-from agent import PGAgent
+from agent2 import PGAgent
 
 # Global variables
 GAMMA = 0.99
