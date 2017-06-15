@@ -3,11 +3,11 @@ import random
 import tensorflow as tf
 
 # Define all Global Variables
-ACTOR_LR = 0.001
-CRITIC_LR = 0.001
+ACTOR_LR = 0.01
+CRITIC_LR = 0.01
 ACTOR_TRAINING_EPOCH = 1
 CRITIC_TRAINING_EPOCH = 1
-SIGMA = 0.1
+SIGMA = 1.0
 
 class Actor(object):
 
@@ -37,7 +37,7 @@ class Actor(object):
 
         bracket = self.action_taken - self.actor_output
 
-        logprob = -(bracket**2)/(2*0.01)
+        logprob = -(bracket**2)/(2*1)
 
         # Placeholder for advantages calculated from critic
         self.advantage = tf.placeholder(tf.float32,[None, 1])
@@ -278,7 +278,7 @@ class PGAgent(object):
         # Get Advantages
         for i in range(len(transitions)):
             transitions[i].append(transitions[i][5] - transitions[i][6])
-        
+
         # transitions is [s, a, r, s1, terminal, R, b, adv]
 
         # Training critic
@@ -295,6 +295,9 @@ class PGAgent(object):
             b_advantages[i] = transitions[i][7]
 
         #print "Advantages ",b_advantages.shape
+        mean = np.mean(b_advantages)
+        std = np.std(b_advantages)
+        b_advantages = (b_advantages - mean)/std
 
         self.critic.train(b_states, b_targets)
 

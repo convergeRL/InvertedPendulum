@@ -1,7 +1,7 @@
 import gym
 import numpy as np
 import random
-
+import matplotlib.pyplot as plt
 
 from agent2 import PGAgent
 
@@ -24,6 +24,8 @@ GAMMA = 0.99
 
 # Creat Agent object
 bot = PGAgent(state_dim, action_dim, GAMMA, low, high)
+rewardList = []
+episodeList = []
 
 for i in range(NUM_EPISODES):
     transitions = [] # Consists of [state, action, reward, n_state, terminal]
@@ -71,7 +73,13 @@ for i in range(NUM_EPISODES):
 
             bot.finish_episode(transitions)
 
+            rewardList.append(totalReward)
+            episodeList.append(i)
 
+plt.plot(episodeList, rewardList)
+plt.xlabel('Num Episodes')
+plt.ylabel('Reward')
+plt.show()
 
 
 
